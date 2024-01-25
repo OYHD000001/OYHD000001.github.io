@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head> 
+<style>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 85%;
+  overflow-y: auto; /* 添加滚动条 */
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  background-color: rgba(116, 235, 160, 0.935);
+}
+/* 设置头部样式，头部在滚动时始终在视口上方，对齐方式为居中，覆盖其他元素并占用全宽*/
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(152, 245, 110);
+  z-index: 999;
+  padding: 10px;
+  width: 100%;
+}
+img {
+  max-width: 70vw;
+  margin: 10px;
+  object-fit: contain;
+}
+.image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.index-number {
+  font-size: 20px;
+  margin-top: 10px;
+}
+#index {
+  overflow: auto;
+  white-space: nowrap;
+}
+#index button {
+  margin: 0 5px;
+}
+    </style>
+<body style="display: flex; align-items: center; justify-content: center; height: 100%; margin: 0;">
+	<header>
+		<input type="file" id="image-file" multiple accept="image/*">
+		<div id="index"></div>
+	  </header>
+	<p></p><p></p><p></p>
+	<div class="container" id="image-container"></div>
+	<script>
+	  document.getElementById('image-file').addEventListener('change', function(event) {
+		var files = event.target.files;
+		var container = document.getElementById('image-container');
+		container.innerHTML = ''; // 清空之前的图片
+		index.innerHTML = '';
+		for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+    var objectUrl = URL.createObjectURL(file);
+    var imgElement = document.createElement('img');
+    imgElement.src = objectUrl;
+    var imgWrapper = document.createElement('div');
+    imgWrapper.classList.add('image-wrapper');
+    imgWrapper.id = 'img-' + (i + 1); // 更新的id应用在wrapper上
+    // 这将在图片下面添加一个包含索引号码的元素
+    var indexNumber = document.createElement('div');
+    indexNumber.textContent = 'No.' + (i + 1);
+    indexNumber.className = 'index-number';
+    imgWrapper.appendChild(imgElement);
+    imgWrapper.appendChild(indexNumber);
+    container.appendChild(imgWrapper);
+    // 创建对应的索引项
+    var indexItem = document.createElement('button');
+    indexItem.innerText = i + 1;
+    (function(i) {
+      indexItem.addEventListener('click', function() {
+        document.getElementById('img-' + (i+1)).scrollIntoView({ behavior: 'smooth' });
+      });
+    })(i);
+    index.appendChild(indexItem);
+}
+	  });
+	</script>
+  </body>
+</html>
